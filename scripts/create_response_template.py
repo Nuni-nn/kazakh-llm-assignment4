@@ -1,5 +1,6 @@
 from pathlib import Path
 import csv, json
+from generation_config import load_settings
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "prompts_500_v1.0.csv"
@@ -16,7 +17,7 @@ FIELDS = [
 def main():
     with open(DATA, "r", encoding="utf-8-sig", newline="") as f:
         prompts = list(csv.DictReader(f))
-    config = json.loads(CONFIG.read_text(encoding="utf-8"))
+    config = load_settings(CONFIG)
 
     rows = []
     n = 1

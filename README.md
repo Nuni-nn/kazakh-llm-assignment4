@@ -92,3 +92,65 @@ Every reported number in Assignment 4 should be traceable to:
 - Annotation rules: `docs/annotation_guideline.md`
 - Retry policy: `docs/retry_policy.md`
 - Word counting: `scripts/word_count.py`
+- Protocol deviations: `docs/protocol_deviations.md` (current Judge: Gemini 3.6 Flash).
+
+## Final generation (after Moodle Protocol Freeze upload)
+
+The runner uses Python 3.10+ and the standard library; no packages are required.
+It reads the frozen configuration without changing model IDs or sampling settings.
+First check the plan offline (no API calls):
+
+```powershell
+py -3 scripts/validate_prompts.py
+py -3 scripts/generate_responses.py
+py -3 -m unittest discover -s scripts -p "test_generate_responses.py"
+```
+
+Set `OPENAI_API_KEY`, `GEMINI_API_KEY`, and `ANTHROPIC_API_KEY` in your local
+environment. Keep keys outside the repository. The provider accounts must have
+API access and billing for the exact frozen models. Then start the paid run:
+
+```powershell
+py -3 scripts/generate_responses.py --execute
+```
+
+The same command resumes remaining runs. To work in batches, add `--limit 30`;
+this executes up to 30 remaining planned responses, including their permitted
+technical retries, without changing the 4,500-response plan.
+
+Outputs in `results/generation/`:
+
+- `responses_raw.csv`: all 4,500 planned rows, including NOT_RUN and FAILED rows;
+  repeat number, requested/reported model version, timestamp, request/response IDs,
+  original visible response, provider status, and retry/failure information.
+- `attempts.jsonl`: durable start/finish events, exact request payloads (no API keys),
+  HTTP headers and unmodified response bytes encoded as base64, including errors.
+- `manifest.json`: frozen file hashes, generation settings, Python/OS versions,
+  creation timestamp and request timeout.
+
+Every successful HTTP response is retained, including refusals, empty or truncated
+answers. `RECEIVED` means an HTTP response was saved, not that it passed linguistic
+or instruction checks. `RECEIVED_UNPARSED` preserves the response for inspection.
+The exact version field contains only what the provider reports; it remains empty
+if unavailable. Requested aliases are recorded separately and never presented as
+verified immutable model snapshots.
+
+Only transport errors, HTTP 408/429 and 5xx errors permit retries, at most two after
+the initial attempt. Completed/failed runs are never automatically regenerated.
+HTTP 400/401/403/404 stops the batch for inspection and retains the failed row.
+Resume rejects changed frozen files or runner code. A process lock prevents two
+runners from writing to the same output directory.
+
+If execution ends between a request-start and request-finish event, resume stops:
+the provider may already have generated/billed the response. Reconcile the request
+against provider logs before continuing; do not delete the journal or start a new
+output directory to bypass it. Keep the same output directory throughout the study.
+The CSV is a derived export; the attempt journal is the source record.
+
+Record the actual Moodle upload timestamp and frozen repository commit in
+`docs/freeze_record.txt`; the runner does not invent or verify Moodle evidence.
+No Judge requests or human annotations are performed by this generation script.
+
+API references: [OpenAI Responses](https://developers.openai.com/api/docs/guides/text),
+[Gemini thinking](https://ai.google.dev/gemini-api/docs/generate-content/thinking),
+[Claude Messages](https://platform.claude.com/docs/en/api/messages/create).
