@@ -1,0 +1,84 @@
+{
+  "protocol_version": "A4_KK500_v1.0",
+  "final_runs_per_prompt_model": 3,
+  "expected_total_responses": 4500,
+  "test_models": [
+    {
+      "model_key": "gpt6_astra",
+      "display_name": "GPT-6 Astra",
+      "model_id": "gpt-6-astra",
+      "api": "OpenAI Responses API",
+      "reasoning": {
+        "effort": "high"
+      },
+      "max_output_tokens": 2048,
+      "sampling_parameters": "Do not send temperature, top_p, or top_logprobs.",
+      "system_prompt": null,
+      "tools": [],
+      "conversation_context": "Independent request; no prior conversation context."
+    },
+    {
+      "model_key": "gemini36_flash",
+      "display_name": "Gemini 3.6 Flash",
+      "model_id": "gemini-3.6-flash",
+      "api": "Gemini API",
+      "thinking_level": "high",
+      "max_output_tokens": 2048,
+      "sampling_parameters": "Do not send temperature, top_p, or top_k.",
+      "system_instruction": null,
+      "tools": [],
+      "conversation_context": "Independent request; no prior conversation context."
+    },
+    {
+      "model_key": "claude_sonnet55",
+      "display_name": "Claude Sonnet 5.5",
+      "model_id": "claude-sonnet-5-5",
+      "api": "Claude Messages API",
+      "thinking": {
+        "type": "adaptive"
+      },
+      "output_config": {
+        "effort": "high"
+      },
+      "max_tokens": 2048,
+      "sampling_parameters": "Do not send temperature, top_p, or top_k.",
+      "system_prompt": null,
+      "tools": [],
+      "conversation_context": "Independent request; no prior conversation context."
+    }
+  ],
+  "judge": {
+    "display_name": "Claude Opus 5.5",
+    "model_id": "claude-opus-5-5",
+    "thinking": {
+      "type": "adaptive"
+    },
+    "output_config": {
+      "effort": "medium"
+    },
+    "max_tokens": 4096,
+    "sampling_parameters": "Do not send temperature, top_p, or top_k.",
+    "tools": [],
+    "prompt_file": "config/judge_prompt.txt",
+    "rubric_file": "config/judge_rubric.json"
+  },
+  "retry_policy": {
+    "maximum_retries_after_initial_attempt": 2,
+    "retry_only_for": [
+      "transport error",
+      "timeout",
+      "rate-limit response",
+      "provider 5xx/server failure"
+    ],
+    "do_not_retry_for": [
+      "poor linguistic quality",
+      "instruction non-compliance in an otherwise valid model response",
+      "unfavourable result"
+    ],
+    "logging": "Every attempt is logged. If all retries fail, the planned run remains recorded as FAILED."
+  },
+  "word_count_rule": {
+    "definition": "Count whitespace-delimited tokens containing at least one Unicode letter or digit after trimming leading/trailing whitespace. Punctuation-only tokens are excluded. Hyphenated forms without surrounding spaces count as one word.",
+    "implementation": "scripts/word_count.py"
+  }
+}

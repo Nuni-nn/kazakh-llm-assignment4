@@ -1,0 +1,49 @@
+{
+  "version": "1.0",
+  "scores": {
+    "grammar": {
+      "scale": "1-5",
+      "5": "No clear grammatical errors",
+      "1": "Frequent/severe grammatical errors"
+    },
+    "morphology": {
+      "scale": "1-5",
+      "5": "Word forms and affixes are consistently correct",
+      "1": "Frequent/severe morphological errors"
+    },
+    "lexical_naturalness": {
+      "scale": "1-5",
+      "5": "Natural and contextually appropriate lexical choices",
+      "1": "Frequent incorrect or unnatural lexical choices"
+    },
+    "overall_quality": {
+      "scale": "1-5",
+      "5": "Highly natural and linguistically reliable Kazakh",
+      "1": "Poor linguistic quality"
+    }
+  },
+  "primary_categories": [
+    "Grammatical",
+    "Morphological",
+    "Lexical"
+  ],
+  "supplementary_labels": [
+    "Orthographic / script",
+    "Code-switching",
+    "Calque",
+    "Singarmonism",
+    "Politeness consistency",
+    "Hallucinated word",
+    "Factual",
+    "Instruction / format",
+    "Other"
+  ],
+  "candidate_error_object": {
+    "span": "exact text span from the response",
+    "primary_category": "Grammatical | Morphological | Lexical | null",
+    "supplementary_labels": "array",
+    "suggested_correction": "short correction if applicable",
+    "confidence": "0.00-1.00",
+    "justification": "brief explanation"
+  }
+}

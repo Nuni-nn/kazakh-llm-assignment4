@@ -2,7 +2,7 @@ from pathlib import Path
 import csv, hashlib, sys
 from collections import Counter
 
-DATA = Path(__file__).resolve().parents[1] / "data" / "Prompts500.csv"
+DATA = Path(__file__).resolve().parents[1] / "data" / "prompts_500_v1.0.csv"
 
 REQUIRED = [
     "Prompt_ID","Subset","Task_Category","Domain","Domain_KK","Difficulty",

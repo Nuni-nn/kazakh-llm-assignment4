@@ -7,7 +7,8 @@ This starter repository is for the frozen experiment pipeline.
 - 400 open-ended prompts
 - 100 reference-based English→Kazakh translation prompts
 - 3 model conditions
-- Expected final outputs: 1,500
+- 3 runs per prompt-model pair
+- Expected final outputs: 4,500
 
 ## Important rule
 Do **not** run the final 500-prompt experiment until:
@@ -23,7 +24,7 @@ python scripts/validate_prompts.py
 
 Expected result: `PASS: Dataset is internally consistent.`
 
-## Step 2 — create the 1,500-row raw-response template
+## Step 2 — create the 4,500-row raw-response template
 ```bash
 python scripts/create_response_template.py
 ```
@@ -58,6 +59,9 @@ Supplementary categories:
 - Other
 
 ## Before the Protocol Freeze is uploaded
+Frozen dataset SHA-256:
+`bb8303cf296bcfb0e418166d551a8a5e2790798bd5e3c7fdb7e7b5b22f4126ec`
+
 Record:
 - exact dataset SHA-256;
 - repository URL;
@@ -65,6 +69,9 @@ Record:
 - exact models and versions;
 - generation parameters;
 - upload date/time.
+
+Commit the frozen dataset and configuration files, then run `git log -1 --oneline`.
+Enter the resulting commit hash in the Protocol Freeze before uploading it to Moodle.
 
 ## After the Freeze
 Only then create the final generation scripts or run the models on the 500 frozen prompts.
@@ -77,3 +84,11 @@ Every reported number in Assignment 4 should be traceable to:
 - raw_response
 - annotation
 - evaluation script/output
+
+## Frozen configuration files
+- Dataset: `data/prompts_500_v1.0.csv`
+- Generation settings: `config/generation_settings.json`
+- Judge: `config/judge_prompt.txt` and `config/judge_rubric.json`
+- Annotation rules: `docs/annotation_guideline.md`
+- Retry policy: `docs/retry_policy.md`
+- Word counting: `scripts/word_count.py`
