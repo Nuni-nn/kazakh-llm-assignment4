@@ -1,0 +1,6 @@
+Dataset file: data/Prompts500.csv
+SHA-256: bb8303cf296bcfb0e418166d551a8a5e2790798bd5e3c7fdb7e7b5b22f4126ec
+Repository URL:
+Branch/tag:
+Commit:
+Protocol upload date/time:
