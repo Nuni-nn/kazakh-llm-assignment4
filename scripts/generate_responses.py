@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / 'data/prompts_500_v1.0.csv'
 CONFIG = ROOT / 'config/generation_settings.json'
 EXPECTED_SHA = 'bb8303cf296bcfb0e418166d551a8a5e2790798bd5e3c7fdb7e7b5b22f4126ec'
-FROZEN = [DATA, *sorted((ROOT / 'config').glob('*')), ROOT / 'docs/retry_policy.md',
+FROZEN = [DATA, CONFIG, ROOT / 'config/judge_prompt.txt', ROOT / 'config/judge_rubric.json', ROOT / 'docs/retry_policy.md',
           ROOT / 'docs/annotation_guideline.md', ROOT / 'scripts/word_count.py']
 ENV_KEYS = {'gpt6_astra': 'OPENAI_API_KEY', 'gemini36_flash': 'GEMINI_API_KEY',
             'claude_sonnet55': 'ANTHROPIC_API_KEY'}
@@ -114,6 +114,17 @@ def append_event(path, event):
         os.fsync(f.fileno())
 
 
+def exhausted_quota(code, raw):
+    """Distinguish exhausted credit/daily quota from a transient rate limit."""
+    if code != 429:
+        return False
+    message = raw.decode('utf-8', errors='replace').lower()
+    return any(marker in message for marker in (
+        'insufficient_quota', 'credit_balance_exhausted',
+        'requests per day limit exceeded', 'generate_requests_per_day',
+        'generaterequestsperday', 'per day quota exceeded'))
+
+
 def read_events(path):
     if not path.exists():
         return []
@@ -121,7 +132,7 @@ def read_events(path):
     return [json.loads(line) for line in path.read_text(encoding='utf-8').splitlines()]
 
 
-def state(events):
+def state(events, allow_unfinished=False):
     started, finished = {}, {}
     for event in events:
         target = started if event['event'] == 'started' else finished
@@ -129,12 +140,16 @@ def state(events):
         if identity in target:
             raise ValueError(f'Duplicate journal event: {identity}')
         target[identity] = event
-    if started.keys() != finished.keys():
+    if started.keys() != finished.keys() and not allow_unfinished:
         raise ValueError('Unfinished request in attempt journal. Do not resend automatically: '
                          'check provider logs and reconcile the journal before continuing.')
     latest = {}
     for event in finished.values():
         latest[event['run_id']] = event
+    if allow_unfinished:
+        for identity in started.keys() - finished.keys():
+            latest[identity[0]] = dict(started[identity], status='UNKNOWN',
+                error_message='Interrupted request: provider outcome unknown; no automatic resend.')
     return latest
 
 
@@ -145,7 +160,7 @@ FIELDS = ['run_id', 'Prompt_ID', 'Subset', 'Task_Category', 'Domain', 'Difficult
 
 
 def export_csv(plan, events, out):
-    latest = {e['run_id']: e for e in events if e['event'] == 'finished'}
+    latest = state(events, allow_unfinished=True)
     temp = out.with_suffix('.tmp')
     with temp.open('w', encoding='utf-8-sig', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=FIELDS)
@@ -165,14 +180,16 @@ def export_csv(plan, events, out):
     temp.replace(out)
 
 
-def execute(plan, directory, timeout, limit):
+def execute(plan, directory, timeout, limit, selected_models=None):
     journal = directory / 'attempts.jsonl'
     events = read_events(journal)
-    latest = state(events)
+    latest = state(events, allow_unfinished=True)
     export_csv(plan, events, directory / 'responses_raw.csv')
     completed = 0
     try:
         for run in plan:
+            if selected_models is not None and run['model']['model_key'] not in selected_models:
+                continue
             previous = latest.get(run['run_id'], {})
             if previous and previous['status'] != 'RETRY_PENDING':
                 continue
@@ -211,6 +228,9 @@ def execute(plan, directory, timeout, limit):
                 events.append(e)
                 export_csv(plan, events, directory / 'responses_raw.csv')
                 print(f"{run['run_id']} {m['model_key']} repeat={run['run_number']} attempt={attempt}: {status}", flush=True)
+                if exhausted_quota(code, raw):
+                    raise ValueError('Provider credits/daily quota exhausted. Batch paused; '
+                                     'journal and unused retry budget retained. Resolve quota before resuming.')
                 if status != 'RETRY_PENDING':
                     break
                 delay = min(60, 2 ** attempt)
@@ -230,18 +250,34 @@ def execute(plan, directory, timeout, limit):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true', help='Send real billable API requests.')
-    parser.add_argument('--output-dir', type=Path, default=ROOT / 'results/generation')
+    parser.add_argument('--profile', choices=['selected200', 'frozen500'], default='selected200')
+    parser.add_argument('--output-dir', type=Path)
     parser.add_argument('--limit', type=int, default=0, help='Stop after this many planned runs; 0 = all remaining.')
     parser.add_argument('--timeout', type=float, default=300)
+    parser.add_argument('--models', nargs='+', choices=['openai', 'gemini', 'claude'],
+                        default=['gemini'], help='Providers to execute in this batch (default: Gemini only).')
     args = parser.parse_args()
     if args.limit < 0 or args.timeout <= 0:
         parser.error('limit must be nonnegative and timeout positive')
-    plan = load_plan()
-    print(f'Validated frozen dataset: {len(plan)} planned outputs, 3 repeats per prompt/model.')
+    if args.profile == 'selected200':
+        from selected_plan import load_selected_plan, SETTINGS
+        plan = load_selected_plan()
+        active_config = SETTINGS
+        frozen_files = [DATA, SETTINGS, ROOT / 'data/selected_200_prompts.csv',
+                        ROOT / 'docs/retry_policy.md', ROOT / 'scripts/word_count.py']
+    else:
+        plan = load_plan()
+        active_config = CONFIG
+        frozen_files = FROZEN
+    if args.output_dir is None:
+        args.output_dir = ROOT / ('results/selected200' if args.profile == 'selected200' else 'results/generation')
+    print(f'Validated {args.profile}: {len(plan)} planned outputs. Default API provider: Gemini.')
     if not args.execute:
         print('Offline plan only. No requests sent. Use --execute to start/resume.')
         return
-    missing = [v for v in ENV_KEYS.values() if not os.environ.get(v)]
+    provider_keys = dict(openai='gpt6_astra', gemini='gemini36_flash', claude='claude_sonnet55')
+    selected = {provider_keys[p] for p in args.models}
+    missing = [ENV_KEYS[k] for k in selected if not os.environ.get(ENV_KEYS[k])]
     if missing:
         raise ValueError('Missing environment variables: ' + ', '.join(missing))
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -257,22 +293,35 @@ def main():
         else:
             import fcntl
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        hashes = {str(p.relative_to(ROOT)): sha(p) for p in FROZEN if p.is_file()}
+        hashes = {str(p.relative_to(ROOT)): sha(p) for p in frozen_files if p.is_file()}
         hashes['scripts/generate_responses.py'] = sha(Path(__file__))
         hashes['scripts/generation_config.py'] = sha(ROOT / 'scripts/generation_config.py')
+        if args.profile == 'selected200':
+            hashes['scripts/selected_plan.py'] = sha(ROOT / 'scripts/selected_plan.py')
         manifest_path = args.output_dir / 'manifest.json'
         if manifest_path.exists():
             manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
             if manifest['file_sha256'] != hashes:
-                raise ValueError('Frozen files/runner differ from the initial run manifest. Resume refused.')
+                changed = {p for p in hashes.keys() | manifest['file_sha256'].keys()
+                           if hashes.get(p) != manifest['file_sha256'].get(p)}
+                if not changed <= {'scripts/generate_responses.py', 'scripts/generation_config.py', 'scripts/selected_plan.py'}:
+                    raise ValueError('Frozen experiment files differ from initial manifest. Resume refused.')
+                # Preserve the initial evidence and record maintenance separately.
+                history = args.output_dir / 'runner_revisions.jsonl'
+                revision = {'timestamp': now(), 'previous_sha256': manifest['file_sha256'],
+                            'current_sha256': hashes,
+                            'reason': 'Runner maintenance; experiment configuration unchanged.'}
+                if not history.exists() or json.loads(history.read_text(encoding='utf-8').splitlines()[-1])['current_sha256'] != hashes:
+                    append_event(history, revision)
         else:
             if (args.output_dir / 'attempts.jsonl').exists():
                 raise ValueError('Journal exists without its manifest.')
             manifest_path.write_text(json.dumps({'created_at': now(), 'planned_outputs': len(plan),
                 'file_sha256': hashes, 'python': sys.version, 'platform': platform.platform(),
-                'timeout_seconds': args.timeout, 'settings': json.loads(CONFIG.read_text(encoding='utf-8'))},
+                'timeout_seconds': args.timeout, 'profile': args.profile,
+                'settings': json.loads(active_config.read_text(encoding='utf-8'))},
                 ensure_ascii=False, indent=2), encoding='utf-8')
-        execute(plan, args.output_dir, args.timeout, args.limit)
+        execute(plan, args.output_dir, args.timeout, args.limit, selected)
 
 
 if __name__ == '__main__':

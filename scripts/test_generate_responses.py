@@ -32,6 +32,51 @@ class GenerationTests(unittest.TestCase):
         self.assertEqual([x['run_number'] for x in plan[:3]], [1, 2, 3])
         self.assertEqual(len({x['run_id'] for x in plan}), 4500)
 
+    def test_selected_plan_is_separate_and_has_larger_gemini_limit(self):
+        from selected_plan import load_selected_plan
+        plan = load_selected_plan()
+        self.assertEqual(len(plan), 600)
+        self.assertEqual(len({r['prompt']['Prompt_ID'] for r in plan}), 200)
+        self.assertEqual({r['run_number'] for r in plan}, {1})
+        self.assertTrue(all(r['run_id'].startswith('S200_') for r in plan))
+        self.assertTrue(all(r['model']['max_output_tokens'] == 8192 for r in plan
+                            if r['model']['model_key'] == 'gemini36_flash'))
+
+    def test_manual_merge_preserves_original_text_and_logs(self):
+        import manual_responses as manual
+        source = self.out / 'manual.csv'
+        manual.template(source)
+        with source.open(encoding='utf-8-sig', newline='') as f:
+            reader = csv.DictReader(f)
+            fields = reader.fieldnames
+            rows = list(reader)
+        self.assertEqual(len(rows), 3000)
+        rows[0].update(raw_response='  unchanged\ntext  ', response_saved='yes',
+                       model_version_displayed='Displayed GPT', collected_at='2026-11-02T15:00:00+05:00',
+                       collection_interface='chat UI')
+        with source.open('w', encoding='utf-8-sig', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=fields)
+            writer.writeheader(); writer.writerows(rows)
+        manual.merge(source, self.out)
+        with (self.out / 'responses_with_manual.csv').open(encoding='utf-8-sig', newline='') as f:
+            combined = list(csv.DictReader(f))
+        self.assertEqual(len(combined), 4500)
+        self.assertEqual(combined[0]['raw_response'], '  unchanged\ntext  ')
+        self.assertEqual(combined[0]['generation_status'], 'MANUAL_RECEIVED')
+        self.assertEqual(combined[0]['model_version_exact'], '')
+        self.assertFalse((self.out / 'attempts.jsonl').exists())
+
+    def test_unselected_provider_is_not_called(self):
+        plan = g.load_plan()[:9]
+        with patch.dict(g.os.environ, {'OPENAI_API_KEY': 'offline-test'}), \
+             patch.object(g, 'send', return_value=(200, {}, b'{"output": []}', '')) as sender:
+            g.execute(plan, self.out, 1, 0, {'gpt6_astra'})
+        self.assertEqual(sender.call_count, 3)
+        with (self.out / 'responses_raw.csv').open(encoding='utf-8-sig', newline='') as f:
+            rows = list(csv.DictReader(f))
+        self.assertEqual(len(rows), 9)
+        self.assertTrue(all(r['generation_status'] == 'NOT_RUN' for r in rows if r['model_key'] != 'gpt6_astra'))
+
     def test_raw_text_and_resume(self):
         text = '  Қазақша\nжауап!  '
         raw = json.dumps({'model': 'exact-version', 'id': 'response1', 'status': 'completed',
@@ -67,10 +112,21 @@ class GenerationTests(unittest.TestCase):
         self.assertEqual(sender.call_count, 1)
         self.assertEqual(g.state(g.read_events(self.out / 'attempts.jsonl'))['RUN0001']['status'], 'RECEIVED')
 
+    def test_exhausted_quota_pauses_without_consuming_retries(self):
+        with self.assertRaisesRegex(ValueError, 'quota exhausted'):
+            self.run_fake([(429, {}, b'{"error":{"code":"credit_balance_exhausted"}}', 'quota')])
+        event = g.state(g.read_events(self.out / 'attempts.jsonl'))['RUN0001']
+        self.assertEqual(event['attempt_number'], 1)
+        self.assertEqual(event['status'], 'RETRY_PENDING')
+        self.assertTrue(g.exhausted_quota(429, b'Generate content requests per day limit exceeded on Free Tier'))
+        self.assertFalse(g.exhausted_quota(429, b'temporary rate limit'))
+
     def test_uncertain_request_cannot_be_resent(self):
         g.append_event(self.out / 'attempts.jsonl', {'event': 'started', 'run_id': 'RUN0001', 'attempt_number': 1})
         with self.assertRaisesRegex(ValueError, 'Unfinished request'):
-            self.run_fake([])
+            g.state(g.read_events(self.out / 'attempts.jsonl'))
+        self.run_fake([]).assert_not_called()
+        self.assertEqual(g.state(g.read_events(self.out / 'attempts.jsonl'), True)['RUN0001']['status'], 'UNKNOWN')
 
     def test_bad_credentials_stop_without_retry(self):
         with self.assertRaisesRegex(ValueError, 'HTTP 401'):

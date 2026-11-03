@@ -1,0 +1,41 @@
+{
+  "protocol_version": "A4_SELECTED200_RUN_A",
+  "tested_models": {
+    "openai": {
+      "model": "gpt-6-astra",
+      "reasoning_effort": "high",
+      "max_output_tokens": 2048,
+      "tools": "disabled"
+    },
+    "gemini": {
+      "model": "gemini-3.6-flash",
+      "thinking_level": "high",
+      "max_output_tokens": 8192,
+      "tools": "disabled"
+    },
+    "claude": {
+      "model": "claude-sonnet-5-5",
+      "adaptive_thinking": true,
+      "effort": "high",
+      "max_output_tokens": 2048,
+      "tools": "disabled"
+    }
+  },
+  "judge": {
+    "provider": "google",
+    "model": "gemini-3.6-flash",
+    "thinking_level": "high",
+    "max_output_tokens": 4096,
+    "tools": "disabled",
+    "tested_model_identity_hidden": true,
+    "prompt_file": "config/judge_prompt.txt",
+    "rubric_file": "config/judge_rubric.json",
+    "note": "Gemini is also a tested model; possible self-evaluation bias is reported as a limitation and checked by human validation."
+  },
+  "runs_per_prompt_per_model": 1,
+  "total_prompts": 200,
+  "planned_tested_model_outputs": 600,
+  "selection_file": "data/selected_200_prompts.csv",
+  "selection_sha256": "4cafdca6761f106e4469394cb5cf65622cc2614ddef7dee7954adf4a95bc7691",
+  "source_tracker_sha256": "fe3af22a8918571042f1e8db32b1ba02a014e68f512638d50811ac98ce2df57d"
+}
