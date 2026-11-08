@@ -275,6 +275,8 @@ def main():
     if not args.execute:
         print('Offline plan only. No requests sent. Use --execute to start/resume.')
         return
+    if args.profile == 'selected200' and (ROOT / 'results/selected200_analysis/import_manifest.json').exists():
+        raise ValueError('The completed 600-response tracker is imported. Continue with judge_responses.py.')
     provider_keys = dict(openai='gpt6_astra', gemini='gemini36_flash', claude='claude_sonnet55')
     selected = {provider_keys[p] for p in args.models}
     missing = [ENV_KEYS[k] for k in selected if not os.environ.get(ENV_KEYS[k])]

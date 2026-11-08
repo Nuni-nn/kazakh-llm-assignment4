@@ -1,0 +1,25 @@
+{
+  "scores": {
+    "grammar": 5,
+    "morphology": 5,
+    "lexical_naturalness": 5,
+    "overall_quality": 4
+  },
+  "candidate_errors": [
+    {
+      "span": "кү",
+      "primary_category": null,
+      "supplementary_labels": [
+        "Instruction / format"
+      ],
+      "suggested_correction": null,
+      "confidence": 0.95,
+      "justification": "The response truncates mid-word ('кү') at the very end of the text."
+    }
+  ],
+  "instruction_compliance": {
+    "passed": false,
+    "notes": "The output is incomplete due to truncation. It lacks the required 'Қорытынды' (Conclusion) section, leaves the counterargument rebuttal unfinished, and fails the word count constraint (~158 words vs. the required 220–300 words)."
+  },
+  "short_summary": "The written portion exhibits high linguistic quality with natural academic Kazakh vocabulary, sound grammar, and correct morphology. However, the output truncates mid-sentence, missing the conclusion, counterargument rebuttal completion, and target word count."
+}

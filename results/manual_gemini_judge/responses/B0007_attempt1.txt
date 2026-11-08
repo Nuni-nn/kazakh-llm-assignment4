@@ -1,0 +1,14 @@
+{
+  "scores": {
+    "grammar": 5,
+    "morphology": 5,
+    "lexical_naturalness": 5,
+    "overall_quality": 5
+  },
+  "candidate_errors": [],
+  "instruction_compliance": {
+    "passed": true,
+    "notes": "The response fully complies with all instructions: it compares two irrigation methods (drip and furrow), details their pros and cons, incorporates all mandatory terms («тамшылатып суару», «ылғал сенсоры», «су пайдалану тиімділігі»), and falls within the required word count range (143 words)."
+  },
+  "short_summary": "The response provides a fluent, accurate, and highly natural analysis in Kazakh with complete instruction compliance and zero linguistic errors."
+}

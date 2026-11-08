@@ -1,0 +1,14 @@
+{
+"scores": {
+"grammar": 5,
+"morphology": 5,
+"lexical_naturalness": 5,
+"overall_quality": 5
+},
+"candidate_errors": [],
+"instruction_compliance": {
+"passed": true,
+"notes": "The model fully satisfied all constraints: it compared two contrasting viewpoints on clinical research, provided a reasoned conclusion, maintained a formal scientific style, properly inflected the requested terms («рандомизация», «бақылау тобы», «информирленген келісім»), and strictly observed the target length constraint (186 words, which falls within the 160–220 word range)."
+},
+"short_summary": "The Kazakh output is linguistically flawless, with accurate grammar, proper morphology, natural academic register, and complete adherence to all prompt instructions."
+}

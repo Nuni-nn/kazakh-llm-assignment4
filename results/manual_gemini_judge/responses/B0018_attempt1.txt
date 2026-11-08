@@ -1,0 +1,23 @@
+{
+  "scores": {
+    "grammar": 5,
+    "morphology": 4,
+    "lexical_naturalness": 5,
+    "overall_quality": 4
+  },
+  "candidate_errors": [
+    {
+      "span": "жүйесіндегі техникалық журналын",
+      "primary_category": "Morphological",
+      "supplementary_labels": [],
+      "suggested_correction": "жүйесіндегі техникалық журналды",
+      "confidence": 0.85,
+      "justification": "The adjectival modifier 'жүйесіндегі' (-дегі suffix) does not establish a possessive relation, making the 3rd person possessive suffix (-ын) on 'журналын' morphologically mismatched; it should either be accusative without possessive ('журналды') or use a genitive noun 'жүйесінің'."
+    }
+  ],
+  "instruction_compliance": {
+    "passed": false,
+    "notes": "The prompt required a word count of 160–220 words, but the generated response contains only about 124 words."
+  },
+  "short_summary": "The response presents a logical and well-structured banking risk scenario covering all required topics and key terms ('мобильді банк', 'комиссия', 'қауіпсіздік'). The Kazakh language quality is high with appropriate financial terminology, containing only one minor morphological case/possessive agreement error. However, it failed the length constraint."
+}

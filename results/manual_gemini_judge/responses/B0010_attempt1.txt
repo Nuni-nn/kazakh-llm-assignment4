@@ -1,0 +1,14 @@
+{
+  "scores": {
+    "grammar": 5,
+    "morphology": 5,
+    "lexical_naturalness": 5,
+    "overall_quality": 5
+  },
+  "candidate_errors": [],
+  "instruction_compliance": {
+    "passed": true,
+    "notes": "The model met all instructions: explained public health through cause-and-effect, included the required terms ('вакцинация', 'эпидемиологиялық бақылау', 'қауіп тобы'), contained conditional sentences, and fell within the 120–160 word limit (138 words)."
+  },
+  "short_summary": "The output is grammatically sound, morphologically correct, and lexically natural Kazakh prose that fully complies with all prompt constraints."
+}

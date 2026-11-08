@@ -1,0 +1,14 @@
+{
+"scores": {
+"grammar": 5,
+"morphology": 5,
+"lexical_naturalness": 5,
+"overall_quality": 5
+},
+"candidate_errors": [],
+"instruction_compliance": {
+"passed": true,
+"notes": "All required components (definition, mechanism, risk, limitation, and practical recommendation) are included under dedicated headings. Required terms ('шифрлау', 'кілттерді басқару', 'цифрлық қолтаңба') are correctly used in context. The response maintains a professional register with complex sentences, and the word count (~248 words) is within the specified 220–300 word range."
+},
+"short_summary": "The response is of exemplary quality, demonstrating precise professional Kazakh terminology, grammatically sound complex sentences, and flawless morphology while adhering strictly to all prompt constraints."
+}

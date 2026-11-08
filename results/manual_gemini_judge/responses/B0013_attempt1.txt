@@ -1,0 +1,14 @@
+{
+  "scores": {
+    "grammar": 5,
+    "morphology": 5,
+    "lexical_naturalness": 5,
+    "overall_quality": 5
+  },
+  "candidate_errors": [],
+  "instruction_compliance": {
+    "passed": true,
+    "notes": "The model fully satisfied all constraints: created a dialogue between a student and a research specialist about sampling quality, naturally integrated the terms 'sampling bias' and 'репрезентативтілік', and maintained an optimal length within the 80–120 word range (91 words)."
+  },
+  "short_summary": "The response is flawless in terms of Kazakh grammar, morphology, and lexical naturalness. Technical terms are accurately explained and naturally contextualized within a clear dialogue format that adheres completely to prompt constraints."
+}

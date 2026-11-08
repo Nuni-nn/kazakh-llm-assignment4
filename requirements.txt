@@ -1,1 +1,11 @@
-# Starter validation/template scripts use Python standard library only.
+# Collection, XLSX import, word counting and Judge scripts use Python 3.10+ standard library only.
+# Final analysis and report were executed with Python 3.12.14.
+numpy==2.5.4
+scipy==1.18.1
+matplotlib==3.11.2
+sacrebleu==2.6.0
+rouge-score==0.1.2
+python-docx==1.2.0
+bert-score==0.3.13
+torch==2.15.0
+transformers==5.22.2

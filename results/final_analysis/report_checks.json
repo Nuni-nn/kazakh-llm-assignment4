@@ -1,0 +1,28 @@
+{
+  "report": "Assignment4_Nurbekova_Kadirbay_Kairkulova.docx",
+  "body_words_including_setup": 2823,
+  "tables": 12,
+  "figures": 3,
+  "error_analysis_cases": 30,
+  "human_evidence": "USER_REPORTED_AGREEMENT",
+  "bert_status": "COMPUTED",
+  "report_sha256": "7433b1b99039df6e57f0b8ee019788295d744d9547f1bd57c2592facdbaf65e0",
+  "builder_sha256": "fdccacf115b981408832b59391d3529c787c1c971acaf4cdee7ba26a16434e78",
+  "rendered_pages": 16,
+  "all_pages_visually_inspected": true,
+  "render_engine": "Installed Microsoft Word PDF export",
+  "all_text_black": true,
+  "results_and_discussion_prose_words": 2155,
+  "independent_reproduction_completed": false,
+  "reviewed_sources": {
+    "Assignment 3": "5e095f40ec0dcacda93366e4917bc7532e2cdb6c5266eaea438c3666f2802d97",
+    "Revised Protocol Freeze": "f1d5349dd3132526d7fe7fbe8b40db2d44bd6d938fd9af18f3c30e33777d83a2"
+  },
+  "review_changes": [
+    "Explicit 60 to 200 prompt design revision",
+    "Separate pilot and final corpus descriptions",
+    "Difficulty-specific word ranges",
+    "Black text in all Word styles and parts",
+    "Accurate distinction between initial BERTScore computation and cached reproduction"
+  ]
+}

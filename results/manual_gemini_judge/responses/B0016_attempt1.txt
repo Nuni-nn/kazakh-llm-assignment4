@@ -1,0 +1,35 @@
+{
+  "scores": {
+    "grammar": 5,
+    "morphology": 5,
+    "lexical_naturalness": 4,
+    "overall_quality": 4
+  },
+  "candidate_errors": [
+    {
+      "span": "үлгі ішінде",
+      "primary_category": "Lexical",
+      "supplementary_labels": [
+        "Calque"
+      ],
+      "suggested_correction": "таңдама ішінде",
+      "confidence": 0.85,
+      "justification": "In statistical contexts, the term 'sample' (выборка) is standardly rendered as 'таңдама' in Kazakh. 'Үлгі' refers to a specimen, pattern, or template."
+    },
+    {
+      "span": "нұсқаулық айнымалы",
+      "primary_category": "Lexical",
+      "supplementary_labels": [
+        "Calque"
+      ],
+      "suggested_correction": "аспаптық айнымалы",
+      "confidence": 0.90,
+      "justification": "The econometrics term 'instrumental variable' (инструментальная переменная) is standardly translated in Kazakh as 'аспаптық айнымалы' or 'құралдық айнымалы'. Using 'нұсқаулық' stems from a literal misinterpretation of 'instrument' as 'instruction'."
+    }
+  ],
+  "instruction_compliance": {
+    "passed": true,
+    "notes": "The model fully satisfied all instructions: it analyzed a hypothetical controversial regression case, distinguished causality from correlation, detailed uncertainty and limitations, appropriately used all required terms ('тәуелді айнымалы', 'коэффициент', 'қалдық'), and met the length constraint of 220–300 words (word count ~225 words)."
+  },
+  "short_summary": "The output is well-structured, fluent, and precise, adhering to all content and length requirements. Syntactic and morphological accuracy are high. The only issues are minor lexical inaccuracies in specialized statistical terminology ('үлгі' instead of 'таңдама' and 'нұсқаулық айнымалы' instead of 'аспаптық айнымалы')."
+}

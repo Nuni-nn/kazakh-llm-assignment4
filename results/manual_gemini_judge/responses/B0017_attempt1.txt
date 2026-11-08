@@ -1,0 +1,14 @@
+{
+  "scores": {
+    "grammar": 5,
+    "morphology": 5,
+    "lexical_naturalness": 5,
+    "overall_quality": 5
+  },
+  "candidate_errors": [],
+  "instruction_compliance": {
+    "passed": true,
+    "notes": "The response complies with all instructions: it explains diagnostic decision making in simple Kazakh, uses the terms 'сезімталдық' and 'ерекшелік' accurately, provides a concrete COVID-19 PCR test example, and has a word count within the required 80–120 range (~89 words)."
+  },
+  "short_summary": "The response is of high linguistic quality in Kazakh with clear, natural terminology, flawless grammar and morphology, and full compliance with all prompt requirements."
+}

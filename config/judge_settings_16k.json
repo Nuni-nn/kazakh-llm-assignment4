@@ -1,0 +1,12 @@
+{
+  "provider": "google",
+  "model": "gemini-3.6-flash",
+  "thinking_level": "high",
+  "max_output_tokens": 16384,
+  "tools": "disabled",
+  "tested_model_identity_hidden": true,
+  "prompt_file": "config/judge_prompt.txt",
+  "rubric_file": "config/judge_rubric.json",
+  "evaluation_revision": "judge_16k",
+  "reason": "Initial 4096-token Judge response ended with MAX_TOKENS before producing valid JSON."
+}

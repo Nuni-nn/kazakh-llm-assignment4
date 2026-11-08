@@ -1,8 +1,163 @@
-# Assignment 4 ? Kazakh LLM Experiment
+# Assignment 4 - Kazakh LLM Experiment
+
+## Current stage - report and reproducible analysis
+
+The report is `Assignment4_Nurbekova_Kadirbay_Kairkulova.docx`. Numerical tables,
+three figures, the final 600-response dataset, statistical outputs and 30 error
+cases are in `results/final_analysis/`.
+
+Install the pinned analysis dependencies with Python 3.12 and reproduce the report.
+
+```powershell
+python -m pip install -r requirements.txt
+python scripts/analyze_results.py --bert
+python scripts/build_report.py
+```
+
+The first BERTScore execution downloads public multilingual BERT weights and
+requires internet access. Later runs may use the saved `bertscore_120.json` with
+`python scripts/analyze_results.py`; the source translation hash is checked.
+
+Four evaluations came from the Gemini API, sixteen from manual Gemini collection,
+and 580 from Codex. Human candidate confirmation was reported by the study team.
+The 150-response labels were transcribed from their statement of identical errors
+and carry `USER_REPORTED_AGREEMENT`. Original independent annotations were not
+supplied. Perfect concordance values describe that statement and cannot establish
+independently observed blind reliability. The report documents these limitations.
+
+`analysis_manifest.json` records input hashes, software versions, seeds and runtime.
+All primary counts require candidate-level confirmation. The primary inference uses
+the 160 open-ended prompts; the 40 translation prompts are analysed separately.
+Repository publication, the `assignment-4` tag and an independent reproduction
+record remain to be completed by the study team.
+
+## Evaluation workflow
+
+### Manual Gemini evaluation
+
+The current manual packet is in `results/manual_gemini_judge/`. Prepare or refresh
+the task list using the following command while the API runner is stopped.
+
+```powershell
+.\scripts\run_judge.ps1 -Action prepare-manual
+```
+
+Open the next `tasks/Bxxxx.txt` file. Paste its entire contents into a fresh Gemini
+chat using the model and thinking mode actually available in your account. Each
+file contains the Judge prompt, rubric, annotation guideline and one anonymous
+prompt-response pair. Save the first output verbatim in `responses/Bxxxx.json`
+or `.txt`, preserving an enclosing Markdown fence if present. Store the displayed
+model and actual thinking mode, using `Unknown` when unavailable. Record the
+timestamp with timezone and optional conversation URL in the matching row of
+`metadata.csv`. Set `raw_file` to the filename inside `responses/`.
+
+Example timestamp is `2026-11-08T19:00:00+05:00`. For a repeated technical attempt,
+also fill `technical_retry_reason`. Save invalid/aborted outputs and their metadata
+before another attempt. Each blind ID permits at most three attempts in total
+across the current 16k API evaluation revision and manual collection. Earlier
+4096-token evaluation failures remain separately archived. The original response
+text, model scores or error spans must not be edited to make JSON pass validation.
+
+Import saved evaluations and refresh the combined export.
+
+```powershell
+.\scripts\run_judge.ps1 -Action import-manual
+```
+
+`combined_judge_600.jsonl` contains all 600 blind IDs with actual API/manual methods
+and saved evaluation status. `progress.json` counts completed and remaining work.
+`manual_imports.jsonl` preserves output bytes and collection metadata. Imported
+attempts cannot be overwritten. Invalid JSON/schema output is logged for review.
+`candidate_errors_for_review.jsonl` contains candidates requiring human verification.
+
+`remaining_tasks.csv` is a refreshed pending list. `metadata.csv` is the working
+collection log and is preserved by repeated preparation. Append rows for technical
+retries with the next attempt number and a distinct raw filename. API/manual overlap
+is rejected. The packet is read from blind inputs only. PRIVATE mappings stay local.
+
+The Gemini web interface may expose different models, thinking modes, system
+instructions or tool controls from the API. Record observed settings and describe
+the collection-mode deviation in the report. The manual record does not assert the
+API model version or output-token setting. Use a fresh independent chat per task
+and disable available web/search/tools controls. Independent human annotators work
+from their separate 150-response input before viewing these Judge suggestions.
+
+The completed workbook supplied on 2026-11-08 is imported into
+`results/selected200_analysis/`. Its source copy and import manifest preserve the
+input. Each response is stored verbatim with its SHA-256 and frozen-rule word
+count. Each source group has 200 records. Exact model versions and collection
+settings are UNVERIFIED. Dates are missing for 541 responses, recorded in QC.
+
+Prepared files in that directory include the following.
+
+- `combined_600.csv` contains all responses and source metadata.
+- `judge_input_blind.jsonl` contains shuffled anonymous evaluation inputs.
+- `judge_mapping_PRIVATE.csv` maps blind IDs to source groups locally.
+- `human_validation_150_blind.csv` supplies independent annotation inputs with
+  50 responses per group, stratified by subset/task category, seed 20261030.
+- `human_150_mapping_PRIVATE.csv` maps the independent sample locally.
+- `translation_120.csv` contains 40 translation prompts across the three groups,
+  with original English and reference Kazakh from the prompt dataset.
+
+Keep PRIVATE mappings away from the Judge and independent annotator. Save human
+annotations in a separate working copy of the blank template. Independently
+annotate the 150-response sample before viewing Judge suggestions. Every Judge
+primary-error candidate must also be manually verified before final counting.
+
+Check Judge inputs offline in PowerShell.
+
+```powershell
+.\scripts\run_judge.ps1
+```
+
+Set `GEMINI_API_KEY` locally, then evaluate the first response.
+
+```powershell
+.\scripts\run_judge.ps1 -Execute -Limit 1
+```
+
+Continue evaluation after inspecting the first result.
+
+```powershell
+.\scripts\run_judge.ps1 -Execute
+```
+
+The wrapper finds local Python or the bundled runtime. The direct Python entry
+point is `scripts/judge_responses.py`, with flags `--execute` and `--limit 1`.
+Judge now uses `config/judge_settings_16k.json` with a 16384-token output limit
+and high thinking. This revision follows the initial truncated B0001 evaluation
+and is recorded in `docs/protocol_deviations.md`. Check the first revised result.
+Truncated output pauses the batch for review.
+
+Current results are written to `results/selected200_judge_16k/`. The initial
+4096-token failure is retained in `results/selected200_judge/`.
+
+- `attempts.jsonl` preserves request starts, finishes and raw HTTP bytes as base64.
+- `judge_results.jsonl` contains all 600 IDs, their status and any validated JSON.
+- `candidate_errors_for_review.jsonl` contains proposed errors for human review.
+- `manifest.json` records input, configuration, guideline and code hashes.
+
+Rate limits and exhausted quota pause the batch. Start the same command after
+quota recovery. Completed evaluations are skipped. Interrupted requests are
+UNKNOWN and require reconciliation. Invalid or truncated JSON is saved for
+review. Input/configuration changes block resumption. A process lock protects
+concurrent writes. The entire annotation guideline and rubric accompany each
+request. Model group labels and PRIVATE mappings stay outside the payload.
+
+Reproduce preparation with the source workbook and run offline tests.
+
+```powershell
+python scripts/prepare_analysis.py "C:\Users\nurai\Downloads\Selected_200_Prompts_Tracker_with_Gemini (1).xlsx"
+python -m unittest discover -s scripts -p "test_*.py"
+```
+
+Repeated import verifies hashes and preserves prepared files. Import of the
+completed tracker blocks further selected200 generation in the generation CLI.
+The following sections document the earlier collection workflow.
 
 ## Current collection plan: Selected 200, Run A
 
-The active `selected200` profile uses the 200 prompts selected in the supplied
+The `selected200` collection profile uses the 200 prompts selected in the supplied
 tracker, one response per prompt from each of three conditions: 600 planned
 responses. Gemini runs through the API; GPT and Claude responses will be supplied
 manually. This revised design differs from the original Protocol Freeze. See

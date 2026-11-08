@@ -1,0 +1,14 @@
+{
+"scores": {
+"grammar": 5,
+"morphology": 5,
+"lexical_naturalness": 5,
+"overall_quality": 5
+},
+"candidate_errors": [],
+"instruction_compliance": {
+"passed": true,
+"notes": "The text strictly satisfies all prompt constraints: academic/technical tone on cloud infrastructure, designated sections (introduction, main analysis, conclusion), explicit counterargument and rebuttal, multiple quantitative/numerical examples, exact mandatory terms («контейнерлеу», «оркестрация», «масштабтау»), and a total word count (~242 words) within the required 220–300 word range."
+},
+"short_summary": "Flawless Kazakh technical text with precise terminology, excellent natural style, correct grammar and morphology, and full compliance with all prompt requirements."
+}

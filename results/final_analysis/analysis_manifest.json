@@ -1,0 +1,43 @@
+{
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "seed": 20261030,
+  "bootstrap_replicates": 10000,
+  "input_sha256": {
+    "results\\selected200_analysis\\combined_600.csv": "fad22df98776db1277e684fb9c412c5a4ffcc478e2beaeeb61bf360ffd0837a5",
+    "results\\selected200_analysis\\human_validation_150_blind.csv": "9cb4eb3a5889ec3fd579af3d0ecd28a8228a3953b70198898094668268eb0312",
+    "results\\selected200_analysis\\translation_120.csv": "d84719169894f69cf6a38eeafa941babdc6b23693a4db8a16a7009dedc42366f",
+    "results\\selected200_judge_16k\\judge_results.jsonl": "bff427558718d2d55de8cf848b8b3398242c856e17ecec3b6f3bbd6cdba8caf7",
+    "results\\selected200_judge_16k\\candidate_errors_for_review.jsonl": "e86979c16fc6841d1a8c9c620c56a96263a829eea163255b7705dba39b2bc511",
+    "scripts\\analyze_results.py": "682b16e2ea3ff81c158ed7dc4f7f35ed2598a8ef90c39c6591246c042db3e680"
+  },
+  "software": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2",
+    "sacrebleu": "2.6.0",
+    "rouge-score": "0.1.2",
+    "python-docx": "1.2.0",
+    "bert-score": "0.3.13",
+    "torch": "2.15.0",
+    "transformers": "5.22.2"
+  },
+  "elapsed_seconds": 12.243800700176507,
+  "human_evidence": "User-reported matching annotations; original independent labels unavailable.",
+  "wilcoxon": "two-sided asymptotic, zero_method wilcox, no continuity correction, average ranks for ties",
+  "bootstrap": "Percentile prompt bootstrap; paired prompt indices preserved across models. Correlations use 2000 cluster replicates.",
+  "output_sha256": {
+    "bertscore_120.json": "6c37f54853b33de1b13eccaf1a91abf94c8acfd6f9a1b1a5defe470c31262c9e",
+    "error_analysis_30.csv": "9643a44fd561f71fae36f868a4f29f2a5fe9cd4b189cc3f25d019fe477458be9",
+    "figure_1_primary_rates.png": "eabfb81890a812eb07d3a81127d035103f00ee375ef50079358e871f059c14e7",
+    "figure_2_error_categories.png": "6e8cd3372247856b098525037b541472083e3e8ab8b7fa7fe3ea21b72a4933c4",
+    "figure_3_difficulty.png": "92e82dce708903afc690a88db4593df880466bf47c27de722cd73a14c06bc988",
+    "final_dataset_600.csv": "bf9c384315e52476192c5c11e837f6a7629242aec5d61b2a9053d848cc93a243",
+    "model_summary.csv": "b7b7d1a8d0573a94ad44899ef12c61c953d8c16c99f54e35f4a1762bd4146fe0",
+    "pairwise_comparisons.csv": "27a4b1d17c7ddb6c27990f0dd329b932aff1834758558c09035a389887bb3ab8",
+    "statistics.json": "943d0e6b180911829ea0ed5c316e526f7ef8aeb626b39ac66176512ac52556ce",
+    "subgroup_summary.csv": "7e5fb8c5c3d27a0108176212402bff096ab1ee1a44bb166f17122f76543356d7",
+    "translation_metrics.csv": "d6888c2c173dd9218b3b27b05658dbee79913cb2c139abe80058c6f90a72a9f3",
+    "translation_per_response.csv": "0d42debea99804acf114c70cefda67a54956185ad44685838c1b19fa5204967f"
+  }
+}

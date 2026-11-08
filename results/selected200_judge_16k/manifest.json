@@ -1,0 +1,26 @@
+{
+  "created_at": "2026-11-08T12:35:14.643007+00:00",
+  "file_sha256": {
+    "C:\\Users\\nurai\\Downloads\\Assignment4_Starter\\Assignment4_Starter\\results\\selected200_analysis\\judge_input_blind.jsonl": "be91423f13583499ffb3c07d5a0cb53ca418cff4036ee3a23da1334a0a86dc7a",
+    "C:\\Users\\nurai\\Downloads\\Assignment4_Starter\\Assignment4_Starter\\config\\judge_settings_16k.json": "8a43f0f4559e451ac7308e302aea2106590262ca07812543280e251a5b8d9cb0",
+    "C:\\Users\\nurai\\Downloads\\Assignment4_Starter\\Assignment4_Starter\\config\\judge_prompt.txt": "4c7c5760a9dd7ae204d2b7db8e1dab8f30af52e8f9313f8b91cdaadc95d5fc2a",
+    "C:\\Users\\nurai\\Downloads\\Assignment4_Starter\\Assignment4_Starter\\config\\judge_rubric.json": "63470b6efd14ad8a3dc3e13f040114e0507f466658fe39b9dd93b1a3dd443f2f",
+    "C:\\Users\\nurai\\Downloads\\Assignment4_Starter\\Assignment4_Starter\\docs\\annotation_guideline.md": "a955da0ff5ef61161949702a7bf3ae9c19ac43f5e68b42dc8f48d576c619d432",
+    "C:\\Users\\nurai\\Downloads\\Assignment4_Starter\\Assignment4_Starter\\scripts\\judge_responses.py": "831592fe374ee4ee9bf9920f16f29d09a641f8c95b75c4212ef71d5c32c2cc2d",
+    "C:\\Users\\nurai\\Downloads\\Assignment4_Starter\\Assignment4_Starter\\scripts\\generate_responses.py": "eb36c7a6d78c3e89f546ae81cb00796e72f01d80bb3f4a709589555174382d17"
+  },
+  "judge_settings": {
+    "provider": "google",
+    "model": "gemini-3.6-flash",
+    "thinking_level": "high",
+    "max_output_tokens": 16384,
+    "tools": "disabled",
+    "tested_model_identity_hidden": true,
+    "prompt_file": "config/judge_prompt.txt",
+    "rubric_file": "config/judge_rubric.json",
+    "evaluation_revision": "judge_16k",
+    "reason": "Initial 4096-token Judge response ended with MAX_TOKENS before producing valid JSON."
+  },
+  "python": "3.13.14 (tags/v3.13.14:fd17997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)]",
+  "timeout_seconds": 300
+}

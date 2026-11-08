@@ -1,0 +1,17 @@
+{
+  "source_filename": "Selected_200_Prompts_Tracker_with_Gemini (1).xlsx",
+  "source_sha256": "3d963d484428ee209a3d06d769dc33079b435c487c47a9a8e2d08cd887d8fb94",
+  "seed": 20261030,
+  "output_sha256": {
+    "source_tracker.xlsx": "3d963d484428ee209a3d06d769dc33079b435c487c47a9a8e2d08cd887d8fb94",
+    "combined_600.csv": "fad22df98776db1277e684fb9c412c5a4ffcc478e2beaeeb61bf360ffd0837a5",
+    "judge_mapping_PRIVATE.csv": "7a7b36942121f6e776892f58e9242b21ccfa5bfe70325b3e00726ffe188b8103",
+    "judge_input_blind.jsonl": "be91423f13583499ffb3c07d5a0cb53ca418cff4036ee3a23da1334a0a86dc7a",
+    "human_validation_150_blind.csv": "9d83626fcc7526f95985af793986943e6212d6962d6d4ebfd931895474bfe40b",
+    "human_150_mapping_PRIVATE.csv": "317910755552a45ea541604f70c9962d850171b134fe11b263ea0f3cf7b46156",
+    "translation_120.csv": "d84719169894f69cf6a38eeafa941babdc6b23693a4db8a16a7009dedc42366f",
+    "qc_summary.json": "2b2184245bfb11c60374f4d2905409a4a6659bbf10e40aed7ed7178d42a80e3a"
+  },
+  "preparation_script_sha256": "8e5f25ce8054c87caae0944a9bef3e9b0cf52897405a1d69c9ec8153be1513ac",
+  "word_count_script_sha256": "a3598ac1c561bc0d61440df1302eaf9adf839f0b2e53bdbb8ad95898522e927b"
+}

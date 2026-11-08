@@ -1,0 +1,43 @@
+{
+  "scores": {
+    "grammar": 4,
+    "morphology": 4,
+    "lexical_naturalness": 4,
+    "overall_quality": 4
+  },
+  "candidate_errors": [
+    {
+      "span": "жақтаушылар көзқарасы",
+      "primary_category": "Morphological",
+      "supplementary_labels": [],
+      "suggested_correction": "жақтаушылардың көзқарасы",
+      "confidence": 0.90,
+      "justification": "Missing genitive case suffix (-дың) on 'жақтаушылар' required to mark possession with 'көзқарасы'."
+    },
+    {
+      "span": "Екінші",
+      "primary_category": "Morphological",
+      "supplementary_labels": [
+        "Calque"
+      ],
+      "suggested_correction": "Екіншіден",
+      "confidence": 0.85,
+      "justification": "Used as an introductory discourse marker ('secondly'), which in Kazakh requires the ablative suffix (-ден)."
+    },
+    {
+      "span": "беткі деңгейде",
+      "primary_category": "Lexical",
+      "supplementary_labels": [
+        "Calque"
+      ],
+      "suggested_correction": "үстіртін",
+      "confidence": 0.85,
+      "justification": "Unnatural phrase resulting from a direct translation of 'on a surface level / на поверхностном уровне'. The idiomatic Kazakh term is 'үстіртін'."
+    }
+  ],
+  "instruction_compliance": {
+    "passed": true,
+    "notes": "The model complied with all instructions: it contrasted two views on competency-based learning, formed a reasoned conclusion, maintained a professional/academic style, correctly inflected all three required target terms ('оқу нәтижесі', 'критериалды бағалау', 'пәнаралық дағды'), and remained within the requested length range (173 words)."
+  },
+  "short_summary": "The response is well-structured and maintains a high-level academic register while satisfying all prompt constraints. Minor flaws include a missing genitive suffix, an uninflected introductory ordinal, and a lexical calque."
+}

@@ -1,0 +1,14 @@
+{
+  "scores": {
+    "grammar": 5,
+    "morphology": 5,
+    "lexical_naturalness": 5,
+    "overall_quality": 5
+  },
+  "candidate_errors": [],
+  "instruction_compliance": {
+    "passed": true,
+    "notes": "The prompt asks for a complex situation analysis regarding public procurement including at least 3 reasons, 2 consequences, explanation of the terms 'тендер', 'бәсекелестік', 'мүдделер қақтығысы', and a word count of 160-220 words. The response contains ~163 words, correctly addresses all content and formatting requirements."
+  },
+  "short_summary": "The response is grammatically correct, natural, highly cohesive, and strictly complies with all prompt instructions and word count constraints."
+}

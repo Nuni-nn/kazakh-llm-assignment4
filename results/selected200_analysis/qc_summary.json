@@ -1,0 +1,37 @@
+{
+  "models": {
+    "GPT": {
+      "responses": 200,
+      "empty_responses": 0,
+      "duplicate_prompt_ids": 0,
+      "missing_dates": 141,
+      "unverified_exact_model_versions": 200
+    },
+    "Claude": {
+      "responses": 200,
+      "empty_responses": 0,
+      "duplicate_prompt_ids": 0,
+      "missing_dates": 200,
+      "unverified_exact_model_versions": 200
+    },
+    "Gemini": {
+      "responses": 200,
+      "empty_responses": 0,
+      "duplicate_prompt_ids": 0,
+      "missing_dates": 200,
+      "unverified_exact_model_versions": 200
+    }
+  },
+  "total_responses": 600,
+  "human_sample": 150,
+  "translations": 120,
+  "human_sample_by_model": {
+    "Claude": 50,
+    "Gemini": 50,
+    "GPT": 50
+  },
+  "shared_prompt_ids": 200,
+  "seed": 20261030,
+  "model_identity_verified": false,
+  "date_values": "Stored source values, including Excel serials. Missing dates left empty."
+}

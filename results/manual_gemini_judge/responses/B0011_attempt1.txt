@@ -1,0 +1,14 @@
+{
+"scores": {
+"grammar": 5,
+"morphology": 5,
+"lexical_naturalness": 5,
+"overall_quality": 5
+},
+"candidate_errors": [],
+"instruction_compliance": {
+"passed": true,
+"notes": "The response successfully connects Zero Trust architecture to daily life through an intuitive apartment building analogy, concisely explains the three key concepts ('identity verification', 'least privilege', and 'microsegmentation'), and satisfies the length constraint with 86 words."
+},
+"short_summary": "An excellent, highly fluent, and accurate Kazakh response that effectively uses a real-world analogy and meets all prompt constraints without linguistic errors."
+}
